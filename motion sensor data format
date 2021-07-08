@@ -1,0 +1,12 @@
+the switchbot motion sensor sends 2 types of packages
+1. 0A09163DFD7300xx001001C0 where xx is the battery level 0-100:  int(xx,16)&0b01111111 (w xx = 2 hex chars) 
+2. 110201060DFF6909MAC#####lcmsssss
+where 
+- MAC##### is the mac number of the device
+- lc is a counter 0..255 that changes when light goes from dim /bright or bright /dim: int(lc,16)
+- c is:  bit 0 = dim; bit 1 = bright; bit 3 = motion, can be  1 2 5 6; 1=dim, no motion 5= motion, dim; 2= bright no motion; 6= bright motion
+-    motion stays on ~ 30+ secs after motion detected
+- m top 2 bits are always on = C; lower 2 bits are part of ssss
+- ssss = seconds since last motion= int(ssss,16) + int(m,16)&0b0011 * 65536    0 .. 262143 (=2**18-1), goes back to 0 after it reaches max)
+
+Karl
